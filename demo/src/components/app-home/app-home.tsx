@@ -9,7 +9,7 @@ let types: InputType<any>[] = [
   // ion-textarea
   'textarea',
 ];
-let options: OptionType<string>[] = types.filter(s => typeof s === 'string').map(x => {
+let options: OptionType<any>[] = types.filter(s => typeof s === 'string').map(x => {
   let s = x as string;
   return ({
     value: s,
@@ -30,7 +30,23 @@ types.push({ type: 'radio', options });
 export class AppHome {
   @State() valueObject: any = {};
   @State() tick = {};
-  update = () => this.tick = {};
+
+  update = () => {
+    if (this.valueObject) {
+      localStorage.setItem('value', JSON.stringify(this.valueObject));
+    }
+    this.tick = {};
+  };
+
+  connectedCallback() {
+    try {
+      this.valueObject = JSON.parse(localStorage.getItem('value'));
+    } catch (e) {
+    }
+    if (!this.valueObject || typeof this.valueObject !== 'object') {
+      this.valueObject = {};
+    }
+  }
 
   render() {
     return [

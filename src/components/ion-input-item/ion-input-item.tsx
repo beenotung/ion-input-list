@@ -64,6 +64,7 @@ export const IonInputItem = <T, >(props: {
     renderInputItem(item: InputItemType<T>) {
       const label = item.label;
       const type = item.type || 'text';
+      const value = item.valueObject[item.key];
       switch (type) {
         case 'date':
         case 'email':
@@ -77,7 +78,7 @@ export const IonInputItem = <T, >(props: {
           return component.renderIonInput(label, <ion-input
             type={type}
             placeholder={item.placeholder}
-            value={item.valueObject[item.key] as any}
+            value={value as any}
             onIonChange={(e: Event) => component.updateItem(item, e)}
             autoCorrect={'on'}
             autocomplete={'on'}
@@ -90,12 +91,12 @@ export const IonInputItem = <T, >(props: {
             onIonChange={(e: Event) => component.updateItem(item, e)}
             min={item.min}
             max={item.max}
-            value={item.valueObject[item.key] as any}
+            value={value as any}
           />);
         case 'textarea':
           return component.renderIonInput(label, <ion-textarea
             placeholder={item.placeholder}
-            value={item.valueObject[item.key] as any}
+            value={value as any}
             onIonChange={(e: Event) => component.updateItem(item, e)}
             autoGrow={true}
             autoCorrect={'on'}
@@ -110,20 +111,20 @@ export const IonInputItem = <T, >(props: {
           if (type.type === 'select') {
             return component.renderIonInput(label, <ion-select
               placeholder={item.placeholder}
-              value={item.valueObject[item.key]}
+              value={value}
               onIonChange={(e: Event) => component.updateItem(item, e)}
               multiple={type.multiple}
             >{type.options.map(option => <ion-select-option
               value={option.value}
               selected={type.multiple
-                ? (item.valueObject[item.key] as any as any[] || []).includes(option.value)
-                : item.valueObject[item.key] === option.value}
+                ? Array.isArray(value) && value.includes(option.value)
+                : value === option.value}
             >{option.text}</ion-select-option>)}</ion-select>);
           }
           if (type.type === 'radio') {
             return <ion-radio-group
-              value={item.valueObject[item.key]}
-              onIonChange={(e: Event) => component.updateItem(item, e, type)}
+              value={value}
+              onIonChange={(e: Event) => component.updateItem(item, e)}
             >
               <ion-list-header>
                 <ion-label>{label}</ion-label>
