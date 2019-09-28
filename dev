@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+set -o pipefail
+pnpm i
+npm run build
+cd demo
+pnpm i
+npm start

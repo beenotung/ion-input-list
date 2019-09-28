@@ -109,8 +109,12 @@ export const IonInputItem = <T, >(props: {
           }
           if (type.type === 'datetime') {
             const d = typeof value === 'number' ? new Date(value) : undefined;
-            const date = d ? d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() : undefined;
-            const time = d ? d.getHours() + ':' + d.getMinutes() : undefined;
+            // const date = d ? d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() : undefined;
+            // const time = d ? d.getHours() + ':' + d.getMinutes() : undefined;
+            // FIXME if set value on the date or time, the UI will render as no value (shows hyphen)
+            // current work around is to leave the value unset, and it'll preserve user inputted value as is
+            // therefore need to manually add extra UI element to preview the value content
+            // e.g. <ion-note>{new Date(this.post.time).toLocaleString()}</ion-note>
             return [
               <ion-item>
                 <ion-label>{type.dateLabel || label}</ion-label>
@@ -118,12 +122,13 @@ export const IonInputItem = <T, >(props: {
                   type='date'
                   placeholder={item.placeholder}
                   // TODO
-                  value={date}
+                  // value={date}
                   onIonChange={(e: Event) => {
                     if (!e.target) {
                       return;
                     }
-                    const newD = new Date((e.target as HTMLInputElement).value);
+                    const s = (e.target as HTMLInputElement).value;
+                    const newD = new Date(s);
                     if (d) {
                       newD.setHours(d.getHours());
                       newD.setMinutes(d.getMinutes());
@@ -148,7 +153,7 @@ export const IonInputItem = <T, >(props: {
                   type='time'
                   placeholder={item.placeholder}
                   // TODO
-                  value={time}
+                  // value={time}
                   onIonChange={(e: Event) => {
                     if (!e.target) {
                       return;

@@ -74,7 +74,12 @@ export class AppHome {
             }))}
             triggerRender={this.update}
           />
-          <pre><code>{JSON.stringify(this.valueObject, null, 2)}</code></pre>
+          <div>
+            <pre><code>{JSON.stringify(this.valueObject, null, 2)}</code></pre>
+            <ion-note>
+              {new Date(this.valueObject.datetime).toLocaleString()}
+            </ion-note>
+          </div>
         </div>
       </ion-content>,
     ];
