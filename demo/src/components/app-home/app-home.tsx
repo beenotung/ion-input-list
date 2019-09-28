@@ -5,7 +5,7 @@ let types: InputType<any>[] = [
 // ion-input
   'date', 'email', 'number', 'password', 'search', 'tel', 'text', 'time', 'url',
   // ion-datetime
-  'datetime',
+  // 'datetime',
   // ion-textarea
   'textarea',
 ];
@@ -16,6 +16,8 @@ let options: OptionType<any>[] = types.filter(s => typeof s === 'string').map(x 
     text: s,
   });
 });
+// ion-datetime
+types.push({ type: 'datetime', dateLabel: 'datetime (date)', timeLabel: 'datetime (time)' });
 // ion-select
 types.push({ type: 'select', options, multiple: false });
 types.push({ type: 'select', options, multiple: true });

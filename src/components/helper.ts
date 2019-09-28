@@ -22,10 +22,10 @@ export type InputType<T> =
   | 'text'
   | 'time'
   | 'url'
-  // ion-datetime
-  | 'datetime'
   // ion-textarea
   | 'textarea'
+  // ion-datetime
+  | { type: 'datetime'; dateLabel?: string; timeLabel?: string }
   // ion-select
   | { type: 'select'; options: Array<OptionType<T>>; multiple?: boolean }
   // ion-radio-group
@@ -115,8 +115,16 @@ export function getUpdateValue<T>(
     case 'password':
       return value as any;
     default:
+      if (!type) {
+        console.error('unknown type:', type);
+        return undefined;
+      }
+      if (type.type === 'datetime') {
+        // TODO
+        return value as any;
+      }
       // enum options, use radio or checkbox
-      if (type && (type.type === 'select' || type.type === 'radio')) {
+      if (type.type === 'select' || type.type === 'radio') {
         return value as any;
       }
       console.error('unknown type:', type);

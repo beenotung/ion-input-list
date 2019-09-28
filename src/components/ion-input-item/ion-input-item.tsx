@@ -103,11 +103,81 @@ export const IonInputItem = <T, >(props: {
             autoCapitalize={'on'}
           />);
         default:
-          // enum options, use radio or checkbox
           if (!type) {
             console.error('unknown type of ion-input-item:', item);
             return;
           }
+          if (type.type === 'datetime') {
+            const d = typeof value === 'number' ? new Date(value) : undefined;
+            const date = d ? d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() : undefined;
+            const time = d ? d.getHours() + ':' + d.getMinutes() : undefined;
+            return [
+              <ion-item>
+                <ion-label>{type.dateLabel || label}</ion-label>
+                <ion-input
+                  type='date'
+                  placeholder={item.placeholder}
+                  // TODO
+                  value={date}
+                  onIonChange={(e: Event) => {
+                    if (!e.target) {
+                      return;
+                    }
+                    const newD = new Date((e.target as HTMLInputElement).value);
+                    if (d) {
+                      newD.setHours(d.getHours());
+                      newD.setMinutes(d.getMinutes());
+                      // newD.setSeconds(d.getMinutes());
+                      // newD.setMilliseconds(d.getMilliseconds());
+                      newD.setSeconds(0);
+                      newD.setMilliseconds(0);
+                    }
+                    if (item.onChange) {
+                      item.onChange(newD.getTime() as any, value);
+                      requestAnimationFrame(() => props.triggerRender());
+                    } else {
+                      item.valueObject[item.key] = newD.getTime() as any;
+                      props.triggerRender();
+                    }
+                  }}
+                />
+              </ion-item>,
+              <ion-item>
+                <ion-label>{type.timeLabel || label}</ion-label>
+                <ion-input
+                  type='time'
+                  placeholder={item.placeholder}
+                  // TODO
+                  value={time}
+                  onIonChange={(e: Event) => {
+                    if (!e.target) {
+                      return;
+                    }
+                    const s = (e.target as HTMLInputElement).value;
+                    const [h, m] = s.split(':');
+                    const newD = new Date();
+                    newD.setHours(+h);
+                    newD.setMinutes(+m);
+                    newD.setSeconds(0);
+                    newD.setMilliseconds(0);
+                    if (d) {
+                      newD.setFullYear(d.getFullYear());
+                      newD.setMonth(d.getMonth());
+                      newD.setDate(d.getDate());
+                    }
+                    if (item.onChange) {
+                      item.onChange(newD.getTime() as any, value);
+                      requestAnimationFrame(() => props.triggerRender());
+                    } else {
+                      item.valueObject[item.key] = newD.getTime() as any;
+                      props.triggerRender();
+                    }
+                  }}
+                />
+              </ion-item>,
+            ];
+          }
+          // enum options, use radio or checkbox
           if (type.type === 'select') {
             return component.renderIonInput(label, <ion-select
               placeholder={item.placeholder}
