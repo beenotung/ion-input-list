@@ -1,0 +1,46 @@
+{
+  "name": "ion-input-list",
+  "version": "0.0.1",
+  "description": "input form (list) builder",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "unpkg": "dist/index.js",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "postformat": "tslint -p . --fix",
+    "prebuild": "cp package.stencil.json package.json",
+    "build": "stencil build --docs",
+    "postbuild":"rm -rf dist && cp package.tsc.json package.json && tsc -p .",
+    "start": "stencil build --dev --watch --serve",
+    "test": "npm run format && npm run build",
+    "generate": "stencil generate"
+  },
+  "devDependencies": {
+    "@ionic/core": "^4.7.4",
+    "@stencil/core": "^1.3.3",
+    "tslint": "^5.20.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-eslint-rules": "^5.4.0"
+  },
+  "peerDependencies": {
+    "@ionic/core": "^4.7.4",
+    "@stencil/core": "^1.3.3"
+  },
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "@ionic/core": "^4.7.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beenotung/ion-input-list.git"
+  },
+  "keywords": [],
+  "author": "Beeno Tung <https://beeno-tung.surge.sh>",
+  "bugs": {
+    "url": "https://github.com/beenotung/ion-input-list/issues"
+  },
+  "homepage": "https://github.com/beenotung/ion-input-list#readme"
+}
